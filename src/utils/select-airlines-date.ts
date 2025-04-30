@@ -17,7 +17,6 @@ export async function selectArrivalDate(page: Page, dateParts: {
   for (let i = 0; i < 12; i++) {
     const current = await rightMonth.textContent();
     const trimmed = current?.trim();
-    console.log(`🧭 Esperado: ${desiredLabel} | Visível: ${trimmed}`);
 
     if (trimmed === desiredLabel) break;
 

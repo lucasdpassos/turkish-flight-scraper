@@ -10,10 +10,4 @@ export class ScraperController {
   async searchFlights(@Body() body: SearchFlightsDto) {
     return this.scraperService.searchFlights(body);
   }
-
-  // Lucas: the ping endpoint is used to check if the server is reachable and running
-  @Get('ping') 
-  getPing() {
-    return 'pong';
-  }
 }

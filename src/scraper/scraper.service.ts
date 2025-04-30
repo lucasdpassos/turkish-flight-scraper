@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { SearchFlightsDto } from './dto/search-flights.dto';
 import { FlightSegment } from './interfaces/flight-segment.interface';
 import { selectAirlinesDate, selectArrivalDate } from '../utils/select-airlines-date';
@@ -8,6 +8,7 @@ import { Page } from 'playwright';
 
 @Injectable()
 export class ScraperService {
+  private readonly logger = new Logger(ScraperService.name);
   constructor(private readonly browserService: PlaywrightService) {}
 
   private async simulateHumanInteraction(page: Page) {
@@ -89,14 +90,14 @@ export class ScraperService {
     try {
       // Lucas: simplified interception for the /availability endpoint
       await page.route('**/availability', async (route) => {
-        console.log('Intercepted **/availability');
+        this.logger.log('Intercepted **/availability');
         await route.continue();
       });
       
 
       page.on('response', async (response) => {
         if (response.url().includes('/availability') && response.status() === 428) {
-          console.log('Akamai anti-bot Challenge fired');
+          this.logger.log('Akamai anti-bot Challenge fired');
         }
       }); 
 
@@ -107,7 +108,7 @@ export class ScraperService {
         if (url.includes('/api/v1/availability')) {
           try {
             const json = await response.json();
-            console.log('Intercepted /api/v1/availability');
+            this.logger.log('Intercepted /api/v1/availability');
             const segments: FlightSegment[] = [];
       
             json?.data?.originDestinationInformationList?.forEach((info: any) => {
@@ -120,12 +121,12 @@ export class ScraperService {
             // Lucas: The /availability endpoint returns multiple times with different data,
             // so we need to check if the segments are already captured
             if(segments.length > 0) {
-              console.log('Segments:', segments);
+              this.logger.log('Segments:', segments);
               capturedSegments = segments;
               resolve(segments);
             }
           } catch (err) {
-            console.error('Failed to process turkish airlines json', err);
+            this.logger.error('Failed to process turkish airlines json', err);
           }
         }
       })
@@ -155,7 +156,7 @@ export class ScraperService {
       try {
         await this.humanClick(page, '#allowCookiesButton');
       } catch {
-        console.log('');
+        this.logger.log('');
       }
 
       // Lucas: Search for flights + human interaction to select the departure and arrival locations
@@ -208,10 +209,10 @@ export class ScraperService {
       // Lucas: Returns the availability JSON captured in the /availability endpoint interception
       return capturedSegments
     } catch (err) {
-      console.error('An error ocurred while scraping', err);
+      this.logger.error('An error ocurred while scraping', err);
       throw err;
     } finally {
-      console.log('Finished Scraping');
+      this.logger.log('Finished Scraping');
     }
   }
 }
