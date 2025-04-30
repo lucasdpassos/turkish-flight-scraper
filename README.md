@@ -3,7 +3,6 @@
 Human-like flight scraping with anti-bot bypass and structured data extraction from Turkish Airlines.
 Developed with a focus on technical testing, Swagger integration, Jest coverage, and advanced Playwright usage.
 
-Attention! Since this is a technical assessment, scrapping will run with headless: false to make debugging more user-friendly for the recruiter.
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=for-the-badge)
 ![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white&style=for-the-badge)
@@ -36,6 +35,9 @@ Automated testing with Jest + Supertest + Playwright
 ##  Demonstration
 
 ###  Insomnia Request (POST /scraper/search)
+
+Attention! Since this is a technical assessment, scrapping will run with headless: false to make debugging more user-friendly for the recruiter.
+You will probably get a timeout error in insomnia or postman if your timeout setting is below 80000ms
 
 <img src="https://i.ibb.co/QvW26v9t/Captura-de-Tela-2025-04-30-a-s-17-16-17.png" alt="Exemplo de resposta no Insomnia" width="700"/>
 
