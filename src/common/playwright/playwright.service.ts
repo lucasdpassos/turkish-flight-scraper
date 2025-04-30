@@ -5,6 +5,8 @@ import { chromium, Page, Browser, BrowserContext } from 'playwright';
 export class PlaywrightService implements OnModuleDestroy {
   private browser: Browser;
 
+  // Lucas: Added additional user agents and viewports to increase variety and enhance detection difficulty.
+  // Also included more languages and time zones for greater diversity.
   private readonly defaultViewports = [
     { width: 1366, height: 768 },
     { width: 1440, height: 900 },
@@ -35,6 +37,7 @@ export class PlaywrightService implements OnModuleDestroy {
     'de-DE,de;q=0.9,en;q=0.8',
   ];
 
+  // Lucas: Method to generate random configurations for the browser context.
   private getRandomConfig() {
     const rand = (arr: string[] | any[]) => arr[Math.floor(Math.random() * arr.length)];
     return {

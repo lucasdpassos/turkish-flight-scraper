@@ -13,7 +13,7 @@ export async function selectArrivalDate(page: Page, dateParts: {
   const nextButton = page.locator('xpath=//*[@id="bookerDatepicker"]/div/div/div/div/div[2]/div[2]/div[1]/button[2]');
   const rightMonth = page.locator('#bookerDatepicker div.hm__style_monthLabel__7gHka').last();
 
-  // Loop até o mês certo aparecer no lado direito
+  // Lucas: Navigate calendar until target month appears in right panel
   for (let i = 0; i < 12; i++) {
     const current = await rightMonth.textContent();
     const trimmed = current?.trim();
@@ -22,10 +22,10 @@ export async function selectArrivalDate(page: Page, dateParts: {
     if (trimmed === desiredLabel) break;
 
     await nextButton.click();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1000); // Brief pause between navigation attempts
   }
 
-  // Monta o aria-label para clicar na data
+  /// Lucas: Generate aria-label format for date selection (e.g., "Fri Oct 25 2024")
   const date = new Date(dateParts.year, dateParts.month - 1, dateParts.day);
   const weekday = date.toLocaleString('en-US', { weekday: 'short' });
   const month = date.toLocaleString('en-US', { month: 'short' });
@@ -35,7 +35,7 @@ export async function selectArrivalDate(page: Page, dateParts: {
 
   await page.waitForSelector(`#bookerDatepicker [aria-label="${ariaLabel}"]`, { timeout: 10000 });
 
-  // Clica no botão da data
+  // Lucas: Select target date in calendar
   await page.locator(`#bookerDatepicker [aria-label="${ariaLabel}"]`).click();
 }
 
@@ -45,6 +45,7 @@ export async function selectAirlinesDate(
   departureMonth: number,
   departureYear: number,
 ): Promise<void> {
+   // Lucas: Open month selection dropdown
   const monthDropdown = page.locator(
     '.hm__style_thy-button__ZfnOU.hm__style_button__QxvpK.hm__style_monthDropdownButton__0cyac'
   );
@@ -69,6 +70,7 @@ export async function selectAirlinesDate(
     }
   }
 
+  //Lucas: Generate and select target date using aria-label format
   const date = new Date(departureYear, departureMonth - 1, departureDay);
   const weekday = date.toLocaleString('en-US', { weekday: 'short' });
   const month = date.toLocaleString('en-US', { month: 'short' });
