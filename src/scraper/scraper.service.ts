@@ -5,6 +5,8 @@ import { selectPassengerCabin, selectPassengerCounts } from '../utils/select-pas
 import { PlaywrightService } from '../common/playwright/playwright.service';
 import { extractFlightData } from '../utils/extract-flight-data';
 import { Page } from 'playwright';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class ScraperService {
@@ -78,21 +80,55 @@ export class ScraperService {
     }
   }
 
-  async searchFlights(params: SearchFlightsDto): Promise<void> {
+  async searchFlights(params: SearchFlightsDto): Promise<any[]> {
     const page: Page = await this.browserService.getPage();
-
+    let capturedSegments: any[] = [];
     try {
       // Interceptação simplificada para logs
       await page.route('**/availability', async (route) => {
         console.log('🛑 Interceptado /availability');
         await route.continue();
       });
+      
 
-      page.on('response', async (response) => {
+/*       page.on('response', async (response) => {
         if (response.url().includes('/availability') && response.status() === 428) {
           console.log('🔐 Challenge detectado');
         }
+      }); */
+
+      let availabilityJson: any = null;
+
+      page.on('response', async (response) => {
+        const url = response.url();
+      
+        if (url.includes('/api/v1/availability')) {
+          try {
+            const json = await response.json();
+      
+            console.log('📄 JSON original da Turkish capturado com sucesso');
+      
+            const segments: any[] = [];
+      
+            json?.data?.originDestinationInformationList?.forEach((info: any) => {
+              info.originDestinationOptionList?.forEach((option: any) => {
+                if (Array.isArray(option.segmentList)) {
+                  segments.push(...option.segmentList);
+                }
+              });
+            });
+      
+            console.log('✈️ Segmentos extraídos:', segments.length);
+            if(segments.length > 0) {
+              console.log('✈️ Segmentos:', segments);
+            capturedSegments = segments;
+            }
+          } catch (err) {
+            console.error('⚠️ Falha ao processar JSON da Turkish:', err);
+          }
+        }
       });
+      
 
       await page.goto('https://www.turkishairlines.com/en-int/', {
         waitUntil: 'load',
@@ -158,11 +194,16 @@ export class ScraperService {
       await this.humanClick(page, searchButtonSelector);
 
       // Espera inteligente para resultados
-      await page.waitForLoadState('networkidle', { timeout: 30000 });
+      await page.waitForLoadState('networkidle', { timeout: 3000 });
       await page.waitForTimeout(5000); // Espera adicional
       const results = await extractFlightData(page);
 console.log('🧾 Voos encontrados:', results);
-
+if (availabilityJson) {
+    console.log('📄 JSON original da Turkish capturado com sucesso');
+  } else {
+    console.warn('⚠️ JSON de /availability não foi retornado');
+  }
+return capturedSegments
     } catch (err) {
       console.error('❌ Erro durante scraping:', err);
       throw err;
