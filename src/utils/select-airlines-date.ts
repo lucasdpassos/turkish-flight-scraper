@@ -24,7 +24,7 @@ export async function selectArrivalDate(page: Page, dateParts: {
     await nextButton.click();
     await page.waitForTimeout(1000);
   }
-  await page.screenshot({ path: 'debug-calendar1.png', fullPage: true });
+
   // Monta o aria-label para clicar na data
   const date = new Date(dateParts.year, dateParts.month - 1, dateParts.day);
   const weekday = date.toLocaleString('en-US', { weekday: 'short' });
@@ -33,11 +33,10 @@ export async function selectArrivalDate(page: Page, dateParts: {
   const year = date.getFullYear();
   const ariaLabel = `${weekday} ${month} ${day} ${year}`;
 
-  await page.waitForSelector(`#bookerDatepicker [aria-label="${ariaLabel}"]`, { timeout: 30000 });
+  await page.waitForSelector(`#bookerDatepicker [aria-label="${ariaLabel}"]`, { timeout: 10000 });
 
   // Clica no botão da data
   await page.locator(`#bookerDatepicker [aria-label="${ariaLabel}"]`).click();
-  await page.screenshot({ path: 'debug-calendar2.png', fullPage: true });
 }
 
 export async function selectAirlinesDate(
@@ -56,7 +55,7 @@ export async function selectAirlinesDate(
     month: 'long',
     year: 'numeric',
   });
-  await page.screenshot({ path: 'debug-calendar3.png', fullPage: true });
+
   const monthButtons = page.locator(
     '.hm__style_dropdownContent__L7K6y.hm__style_start__WMD_R.hm__style_monthDropdownContent__7NNhL button'
   );
