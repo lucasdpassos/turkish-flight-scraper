@@ -1,0 +1,16 @@
+2025/04/29-20:48:22.824 2f41131 Reusing MANIFEST /Users/lab/Projects/turkish-flight-scraper/turkish-flight-scraper/playwright-session/Default/Session Storage/MANIFEST-000001
+2025/04/29-20:48:22.825 2f41131 Recovering log #15
+2025/04/29-20:48:22.829 2f41131 Level-0 table #17: started
+2025/04/29-20:48:22.838 2f41131 Level-0 table #17: 525301 bytes OK
+2025/04/29-20:48:22.838 2f41131 Recovering log #16
+2025/04/29-20:48:22.838 2f41131 Reusing old log /Users/lab/Projects/turkish-flight-scraper/turkish-flight-scraper/playwright-session/Default/Session Storage/000016.log 
+2025/04/29-20:48:22.842 2f41131 Delete type=0 #15
+2025/04/29-20:48:22.843 2f41133 Compacting 4@0 + 1@1 files
+2025/04/29-20:48:22.856 2f41133 Generated table #18@0: 86 keys, 525883 bytes
+2025/04/29-20:48:22.856 2f41133 Compacted 4@0 + 1@1 files => 525883 bytes
+2025/04/29-20:48:22.857 2f41133 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/04/29-20:48:22.858 2f41133 Delete type=2 #14
+2025/04/29-20:48:22.858 2f41133 Delete type=2 #17
+2025/04/29-20:48:22.858 2f41133 Delete type=2 #7
+2025/04/29-20:48:22.858 2f41133 Delete type=2 #12
+2025/04/29-20:48:22.858 2f41133 Delete type=2 #10

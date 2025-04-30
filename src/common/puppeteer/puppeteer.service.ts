@@ -6,6 +6,8 @@ import { Browser, Page } from 'puppeteer';
 const stealth = StealthPlugin();
 stealth.enabledEvasions.delete('iframe.contentWindow');
 stealth.enabledEvasions.delete('media.codecs');
+puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')());
+puppeteer.use(require('puppeteer-extra-plugin-font-size')());
 puppeteer.use(stealth); // fora de qualquer método/classe
 
 @Injectable()
@@ -43,14 +45,14 @@ export class PuppeteerService implements OnModuleDestroy {
     await page.setJavaScriptEnabled(true);
     await page.setBypassCSP(false); // Lucas: Adicionei o bypassCSP só por garantia
     await page.setViewport({ width: 1280, height: 800 });
-    await page.setExtraHTTPHeaders({
+/*     await page.setExtraHTTPHeaders({
         'X-clientId': '3f208142-f801-4c39-a1f6-1a75db85159a',
         'X-requestId': '<algum-uuid-válido>',
         'X-bfp': 'e5cba3a5b19bbe2e8551a762b3cc6d0b',
         'X-country': 'BR',
         'X-token': 'AgQQAPNkF-RO0rJK3XbHeB088mP3dpdHf4fvYNhe7w',
         'X-conversation-id': '3f208142-f801-4c39-a1f6-1a75db85159a',
-      });
+      }); */
     return page;
   }
 
