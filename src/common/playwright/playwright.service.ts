@@ -1,5 +1,6 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
-import { chromium, Browser, BrowserContext, Page } from 'playwright';
+import { chromium, Page, Browser } from 'playwright';
+import { ScrapingBrowser } from '@zenrows/browser-sdk';
 
 @Injectable()
 export class PlaywrightService implements OnModuleDestroy {
@@ -7,24 +8,21 @@ export class PlaywrightService implements OnModuleDestroy {
 
   async getPage(): Promise<Page> {
     if (!this.browser) {
-      this.browser = await chromium.launch({
-        headless: false,
-        args: [
-          '--no-sandbox',
-          '--disable-blink-features=AutomationControlled',
-        ],
+      const scrapingBrowser = new ScrapingBrowser({
+        apiKey: '3549e99b8edc7cb67aba13700095df3c3dbdb7ba',
       });
+
+      const connectionURL = scrapingBrowser.getConnectURL();
+      this.browser = await chromium.connectOverCDP(connectionURL);
     }
 
-    const context: BrowserContext = await this.browser.newContext({
+    const context = await this.browser.newContext({
       viewport: { width: 1280, height: 800 },
-      userAgent:
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     });
 
     const page = await context.newPage();
 
-    // Spoofing básico
+    // Opcional: spoofing adicional
     await page.addInitScript(() => {
       Object.defineProperty(navigator, 'webdriver', { get: () => false });
       Object.defineProperty(Function.prototype, 'toString', {
@@ -34,6 +32,7 @@ export class PlaywrightService implements OnModuleDestroy {
         writable: false,
         configurable: false,
       });
+      (window as any).chrome = { runtime: {} };
     });
 
     return page;
