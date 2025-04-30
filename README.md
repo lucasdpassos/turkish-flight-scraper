@@ -1,7 +1,9 @@
 # Turkish Airlines Flight Scraper
 
-**Scraping com simulação humana realista, bypass anti-bot e extração estruturada de voos da Turkish Airlines.**  
-Desenvolvido com foco em testes técnicos, integração com Swagger, cobertura com Jest e uso avançado do Playwright.
+Human-like flight scraping with anti-bot bypass and structured data extraction from Turkish Airlines.
+Developed with a focus on technical testing, Swagger integration, Jest coverage, and advanced Playwright usage.
+
+Attention! Since this is a technical assessment, scrapping will run with headless: false to make debugging more user-friendly for the recruiter.
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=for-the-badge)
 ![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white&style=for-the-badge)
